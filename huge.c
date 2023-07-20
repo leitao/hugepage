@@ -30,6 +30,8 @@ void *alloc_huge_page(void *unused)
 		fprintf(stderr, "Failed to allocate memory\n");
 		perror("");
 	}
+
+	return NULL;
 }
 
 void *mfree(void *unused)
@@ -39,6 +41,8 @@ void *mfree(void *unused)
 		return NULL;
 
 	madvise(c, SIZE, MADV_DONTNEED);
+
+	return NULL;
 }
 
 void *touch(void *unused)
@@ -49,6 +53,8 @@ void *touch(void *unused)
 
 	char x = ((char *)c)[0];
 	printf("%c", x);
+
+	return NULL;
 }
 
 int main()
