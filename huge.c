@@ -7,6 +7,8 @@
 #include <assert.h>
 
 
+#define REALLOC 0
+
 #define SIZE (1 << 21)
 char *c = NULL;
 
@@ -14,9 +16,11 @@ int usleep(useconds_t usec);
 
 void *alloc_huge_page(void *unused)
 {
+#ifdef REALLOC
 	c = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
 		 MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
 		 -1, 0);
+#endif
 
 	if ((long unsigned) c == -1) {
 		/* perror("Failed to allocate\n"); */
@@ -72,7 +76,9 @@ int main()
 		pthread_join(thread2, NULL);
 		pthread_join(thread3, NULL);
 
+#ifdef REALLOC
 		munmap(c, SIZE);
+#endif
 		c = NULL;
 		/* fprintf(stderr, "."); */
 	}
